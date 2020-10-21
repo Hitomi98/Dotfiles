@@ -1,0 +1,292 @@
+# Before Applying, Install:
+# Custom Script - "pushclip"
+# Custom Script - "pushclipim"
+# FlameShot
+# RoFi
+# pasystray
+# compton
+# dunst
+# rxvt-unicode
+# hsetroot
+
+# sudo apt-get install pasystray compton dunst rofi flameshot rxvt-unicode hsetroot
+
+### Variables ###
+
+# font
+set $font monospace
+set $size 10
+
+# colors
+
+set_from_resource $fg i3wm.foreground #d6e5fb
+# set_from_resource $bg i3wm.background #000000
+set_from_resource $bg i3wm.background #12151a
+set_from_resource $black i3wm.color0 #000000
+set_from_resource $gray i3wm.color8 #2b323e
+# set_from_resource $gray i3wm.color8 #888888
+set_from_resource $white i3wm.color15 #ffffff
+# set_from_resource $red i3wm.color1 #ff8800
+set_from_resource $red i3wm.color1 #f0185a
+# set_from_resource $acc i3wm.color1 #ff0000
+set_from_resource $acc i3wm.color1 #f0185a
+
+# modifier key
+set $mod Mod4
+
+# terminal
+set $term urxvt
+
+# workspace names
+set $ws1  "1:I"
+set $ws2  "2:II"
+set $ws3  "3:III"
+set $ws4  "4:IV"
+set $ws5  "5:V"
+set $ws6  "6:VI"
+set $ws7  "7:VII"
+set $ws8  "8:VIII"
+set $ws9  "9:IX"
+set $ws10 "10:X"
+
+# commands
+set $nexec exec --no-startup-id
+
+### Autostart ###
+# $nexec xsetroot -solid slategray --no-startup-id
+# $nexec $HOME/.autostart
+
+# notification daemon
+$nexec dunst -frame_width 2 -frame_color "$acc" -fn "$font $size" -lb "$bg" -nb "$bg" -cb "$acc" -lf "$fg" -nf "$fg" -cf "$bg" -lto 3 -nto 5 -cto 0 -align "center" -padding 16 -horizontal_padding 16
+
+### Bar/window borders ###
+
+# font for window titles and the bar
+# font pango: $font $size
+
+# window border colors
+# the order is:         border background text    indicator child_border
+client.focused          $bg    $bg        $fg     $acc      $acc
+client.focused_inactive $bg    $bg        $grey   $gray     $gray
+client.unfocused        $bg	   $bg        $grey   $gray     $gray
+client.urgent           $red   $red       $bg     $red      $red
+client.placeholder      $gray  $gray      $bg     $gray     $gray
+client.background       $gray
+
+# hide borders when full screen
+hide_edge_borders smart
+
+for_window [class="^.*"] border pixel 4
+
+# print all window titles bold
+# for_window [class=".*"] title_format "<b>%title</b>"
+
+# bar colors
+bar {
+    status_command i3status
+    separator_symbol "   "
+    strip_workspace_numbers yes
+	font pango: $font $size
+	
+    colors {
+        background $bg
+        statusline $fg
+        separator $fg
+
+        focused_workspace  $acc $acc $bg
+        active_workspace   $bg $bg $fg
+        inactive_workspace $bg $bg $fg
+        urgent_workspace   $red $red $white
+        binding_mode       $acc $acc $bg
+    }
+}
+
+
+### Keybindings ###
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# next/previous workspace
+bindsym $mod+Tab       workspace back_and_forth
+# bindsym $mod+Tab             workspace next
+# bindsym $mod+Shift+Tab       workspace prev
+bindsym $mod+Control+Left    workspace prev
+bindsym $mod+Control+Right   workspace next
+
+# move focused container (window) to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# exit i3 (logs you out of your X session)
+# bindsym $mod+Shift+e exit
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3 and end X session?' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# modifier key to press for dragging containers around
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec $term
+bindsym $mod+t exec $term
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# brightness keys
+# bindsym $mod+Shift+d $nexec brightnessctl set 1%
+# bindsym XF86MonBrightnessDown $nexec brightnessctl set 10%-
+# bindsym XF86MonBrightnessUp $nexec brightnessctl set +10%
+
+# volume keys
+bindsym XF86AudioRaiseVolume $nexec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume $nexec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute $nexec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# take screenshot
+bindsym Print $nexec scrot; $nexec notify-send "screenshot captured"
+
+# start dmenu (a program launcer)
+bindsym $mod+d $nexec dmenu_run -i -nb "$bg" -nf "$fg" -sb "$acc" -sf "$bg" -fn "$font-$size"
+# bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
+bindsym $mod+Shift+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -fn '  Roboto-30' -l 5 -nb '#212121' -nf '#b7bbbd' -sb '#000000' -sf '#6da3a1'"
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+h move left 100 px
+bindsym $mod+Shift+j move down 100 px
+bindsym $mod+Shift+k move up 100 px
+bindsym $mod+Shift+l move right 100 px
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left   move left
+bindsym $mod+Shift+Down   move down
+bindsym $mod+Shift+Up     move up
+bindsym $mod+Shift+Right  move right
+
+# toggle split direction
+bindsym $mod+v split toggle
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# toggle bar
+bindsym $mod+b bar mode dock
+bindsym $mod+Shift+b bar mode invisible
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# power menu mode
+bindsym $mod+Shift+p mode "[s]uspend [h]ibernate [r]eboot [p]oweroff"
+
+# resize mode
+bindsym $mod+r mode "resize"
+
+# resize mode
+mode "resize" {
+	bindsym h resize shrink width 100 px or 10 ppt
+	bindsym j resize grow height 100 px or 10 ppt
+	bindsym k resize shrink height 100 px or 10 ppt
+	bindsym l resize grow width 100 px or 10 ppt
+
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym $mod+r mode "default"
+}
+
+# power menu mode
+mode "[s]uspend [h]ibernate [r]eboot [p]oweroff" {
+	bindsym s mode "default"; exec systemctl suspend
+	bindsym h mode "default"; exec systemctl hibernate
+	bindsym r mode "default"; exec systemctl reboot
+	bindsym p mode "default"; exec systemctl poweroff
+
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym $mod+Shift+p mode "default"
+}
+
+
+### MY CUSTOM RULES ###
+
+## AutoStart ##
+exec --no-startup-id compton
+exec --no-startup-id /usr/bin/nm-applet
+exec --no-startup-id pasystray
+# exec --no-startup-id xrdb
+exec --no-startup-id xrdb ~/.Xresources &
+# exec emacs --daemon # Launch Emacs at Startup
+
+## My Key Bindings ##
+# bindcode 232 exec xbacklight -dec 10
+# bindcode 233 exec xbacklight -inc 10
+bindsym $mod+F11 exec xbacklight -dec 10
+bindsym $mod+F12 exec xbacklight -inc 10
+bindsym Control+mod1+l exec i3lock -c 000000 -u -i /home/thoshxu/Pictures/Wallpapers/unit02_1080.png
+bindsym $mod+Shift+x exec i3lock -c 000000 -u -i /home/thoshxu/Pictures/Wallpapers/unit02_1080.png && systemctl suspend
+bindsym $mod+g exec ~/bin/pushclip
+bindsym $mod+Shift+g exec ~/bin/pushclipim
+bindsym $mod+Shift+s exec "flameshot gui"
+bindsym mod1+Tab exec "rofi -show window"
+# bindsym $mod+x exec "~/bin/title-case-converter.sh" # Does not work for some reason
+
+## Set Background ##
+# exec --no-startup-id feh --bg-fill ~/Pictures/Wallpapers/tokyo-skyline.png
+exec --no-startup-id hsetroot -solid "#708090"
+
+## Window Rules ##
+for_window [class="qBittorrent"] floating enable, move absolute position center
+for_window [class="Anki"] floating enable, move absolute position center
+for_window [title="DeaDBeeF"] floating enable, move absolute position center
+for_window [class="Xfce4-taskmanager"] floating enable, move absolute position center
+for_window [class="keepassxc"] floating enable, move absolute position center
+# for_window [class="Ripcord"] floating enable, move absolute position center
+# for_window [class="Pavucontrol"] floating enable
+
+for_window [title="win0"] floating enable, move absolute position center # Android Studio Splash Screen
+for_window [class="jetbrains-studio"] floating enable, move absolute position center # Android Studio Project Select Screen

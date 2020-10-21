@@ -1,0 +1,306 @@
+;; Require Emacs' package functionality
+(require 'package)
+;; (set package-enable-at-startup nil)
+
+;; Add the Melpa repository to the list of package sources
+(add-to-list 'package-archives
+ 	'("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode))
+
+(use-package ivy
+  :ensure t)
+
+(use-package dashboard
+  :ensure t)
+
+(use-package material-theme
+  :ensure t)
+
+(use-package moe-theme
+  :ensure t)
+
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t)
+
+(use-package doom-themes
+  :ensure t)
+
+(use-package flucui-themes
+  :ensure t)
+
+(use-package neotree
+  :ensure t)
+
+(use-package iflipb
+  :ensure t)
+
+(use-package hydra
+  :ensure t)
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
+(use-package centaur-tabs
+  :ensure t
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward))
+
+(use-package beacon
+  :ensure t
+  :init (beacon-mode 1))
+
+(use-package org-bullets
+  :ensure t
+  :init
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;;(use-package switch-window
+;;  :ensure t
+;;  :config
+;;  (setq switch-window-input-style 'minibuffer)
+;;  (setq switch-window-increase 4)
+;;  (setq switch-window-threshold 2)
+;;  (setq switch-window-shortcut-style 'qwerty)
+;;  (setq switch-window-qwerty-shortcuts
+;;		'("a", "s", "d", "f", "j", "k", "l"))
+;;  :bind
+;;  ([remap other-window] . switch-window))
+
+;;;; Org mode configuration
+;; Enable Org mode
+(require 'org)
+
+;; choose shell
+(defvar my-term-shell "/bin/zsh")
+(defadvice ansi-term (before force-zsh)
+  (interactive (list my-term-shell)))
+(ad-activate 'ansi-term)
+
+;; GUI PREFERENCES
+  ;; disable menu-bar
+  (menu-bar-mode -1)
+  ;; disable scroll-bar
+  (toggle-scroll-bar -1)
+  ;; disable tool-nar
+  (tool-bar-mode -1)
+  ;; enable line numbers
+  (global-linum-mode 1)
+  ;; make the left fringe 4 pixels wide and the right disappear
+  (fringe-mode '(4 . 0))
+  ;; Only type in GPG password when opening
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+  ;; Set Tabs to 4
+  (setq-default tab-width 4) ; Assuming you want your tabs to be four spaces wide
+  (setq-default indent-tabs-mode 'only)
+  (defvaralias 'c-basic-offset 'tab-width)
+  ;; Allow highlighted text to be deleted
+  (delete-selection-mode 1)
+  ;; change prompt to y/n instead of longer yes/no
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  ;; use Ctrl+x followed by Ctrl+k to kill current buffer (no choose prompt)
+  (global-set-key [(control x) (control k)] 'kill-this-buffer)
+  ;; call ibuffer (buffers list) with Ctrl+x followed by Ctrl+b
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  ;; set scroll not to be so fast
+  ;;(setq scroll-conservatively 100)
+
+  ;; set current line to be highlighted (makes it easier to find) only when using emacs GUI
+  ;;(when window-system (global-hl-line-mode t)) ;; original overwrote ALL backgrounds
+  (defun my-hl-line-range-function ()
+    (cons (line-end-position) (line-beginning-position 2)))
+  (setq hl-line-range-function #'my-hl-line-range-function)
+
+  (when window-system
+    (require 'hl-line)
+    (set-face-attribute 'hl-line nil :inherit nil :background "light yellow")
+    (setq global-hl-line-sticky-flag t)
+    (global-hl-line-mode 1))
+
+  ;; turn lambda into lambda symbol (for example) only when using emacs GUI
+  (when window-system (global-prettify-symbols-mode t))
+  ;; stop emacs from creating autosaves
+  (setq make-backup-file nil)
+  (setq auto-save-default nil)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(beacon-color "#ff9da4")
+ '(custom-enabled-themes (quote (doom-nord-light)))
+ '(custom-safe-themes
+   (quote
+	("cf9f20cab61999609e47b969f6d7a89c148e16f94ae3f2f127fecfc27dc878d3" "a11808699b77d62f5d10dd73cd474af3057d84cceac8f0301b82ad3e4fb0433e" "cb96a06ed8f47b07c014e8637bd0fd0e6c555364171504680ac41930cfe5e11e" "fa3bdd59ea708164e7821574822ab82a3c51e262d419df941f26d64d015c90ee" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "1d50bd38eed63d8de5fcfce37c4bb2f660a02d3dff9cbfd807a309db671ff1af" "615123f602c56139c8170c153208406bf467804785007cdc11ba73d18c3a248b" "f9cae16fd084c64bf0a9de797ef9caedc9ff4d463dd0288c30a3f89ecf36ca7e" "285efd6352377e0e3b68c71ab12c43d2b72072f64d436584f9159a58c4ff545a" "229c5cf9c9bd4012be621d271320036c69a14758f70e60385e87880b46d60780" "51956e440cec75ba7e4cff6c79f4f8c884a50b220e78e5e05145386f5b381f7b" "58c3313b4811ed8b30239b1d04816f74d438bcb72626d68181f294b115b7220d" "7d708f0168f54b90fc91692811263c995bebb9f68b8b7525d0e2200da9bc903c" "c83c095dd01cde64b631fb0fe5980587deec3834dc55144a6e78ff91ebc80b19" "730a87ed3dc2bf318f3ea3626ce21fb054cd3a1471dcd59c81a4071df02cb601" "2cdc13ef8c76a22daa0f46370011f54e79bae00d5736340a5ddfe656a767fddf" "93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" "e1ecb0536abec692b5a5e845067d75273fe36f24d01210bf0aa5842f2a7e029f" "99ea831ca79a916f1bd789de366b639d09811501e8c092c85b2cb7d697777f93" "7c4cfa4eb784539d6e09ecc118428cd8125d6aa3053d8e8413f31a7293d43169" "d5f8099d98174116cba9912fe2a0c3196a7cd405d12fa6b9375c55fc510988b5" "7f791f743870983b9bb90c8285e1e0ba1bf1ea6e9c9a02c60335899ba20f3c94" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" "dde8c620311ea241c0b490af8e6f570fdd3b941d7bc209e55cd87884eb733b0e" "361f5a2bc2a7d7387b442b2570b0ef35198442b38c2812bf3c70e1e091771d1a" "d74c5485d42ca4b7f3092e50db687600d0e16006d8fa335c69cf4f379dbd0eee" "be9645aaa8c11f76a10bcf36aaf83f54f4587ced1b9b679b55639c87404e2499" "1ed5c8b7478d505a358f578c00b58b430dde379b856fbcb60ed8d345fc95594e" "0ad7f1c71fd0289f7549f0454c9b12005eddf9b76b7ead32a24d9cb1d16cbcbd" "6231254e74298a1cf8a5fee7ca64352943de4b495e615c449e9bb27e2ccae709" "56911bd75304fdb19619c9cb4c7b0511214d93f18e566e5b954416756a20cc80" "845103fcb9b091b0958171653a4413ccfad35552bc39697d448941bcbe5a660d" "6bacece4cf10ea7dd5eae5bfc1019888f0cb62059ff905f37b33eec145a6a430" "1ce6ff4e48f97e7e6b12ae81e2ae330bc82df312495506d17cbbf0a99a954ded" "1526aeed166165811eefd9a6f9176061ec3d121ba39500af2048073bea80911e" "a339f231e63aab2a17740e5b3965469e8c0b85eccdfb1f9dbd58a30bdad8562b" "d71aabbbd692b54b6263bfe016607f93553ea214bc1435d17de98894a5c3a086" "3577ee091e1d318c49889574a31175970472f6f182a9789f1a3e9e4513641d86" "a83f05e5e2f2538376ea2bfdf9e3cd8b7f7593b16299238c1134c1529503fa88" "9b01a258b57067426cc3c8155330b0381ae0d8dd41d5345b5eddac69f40d409b" "bc836bf29eab22d7e5b4c142d201bcce351806b7c1f94955ccafab8ce5b20208" "e61752b5a3af12be08e99d076aedadd76052137560b7e684a8be2f8d2958edc3" "ae65ccecdcc9eb29ec29172e1bfb6cadbe68108e1c0334f3ae52414097c501d2" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "7675ffd2f5cb01a7aab53bcdd702fa019b56c764900f2eea0f74ccfc8e854386" "732b807b0543855541743429c9979ebfb363e27ec91e82f463c91e68c772f6e3" "a24c5b3c12d147da6cef80938dca1223b7c7f70f2f382b26308eba014dc4833a" default)))
+ '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
+ '(frame-background-mode (quote dark))
+ '(hl-sexp-background-color "#1c1f26")
+ '(jdee-db-active-breakpoint-face-colors (cons "#1c1f24" "#51afef"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#1c1f24" "#7bc275"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#1c1f24" "#484854"))
+ '(objed-cursor-color "#ff665c")
+ '(package-selected-packages
+   (quote
+	(mode-icons org-bullets switch-window beacon centaur-tabs hydra doom-modeline flucui-themes neotree doom-themes color-theme-sanityinc-tomorrow dashboard ivy which-key use-package)))
+ '(pdf-view-midnight-colors (cons "#bbc2cf" "#242730"))
+ '(rustic-ansi-faces
+   ["#242730" "#ff665c" "#7bc275" "#FCCE7B" "#51afef" "#C57BDB" "#5cEfFF" "#bbc2cf"])
+ '(window-divider-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "BE5N" :family "Iosevka Term SS05"))))
+ '(centaur-tabs-selected ((t (:background "#ECF0F1" :foreground "cyan3"))))
+ '(centaur-tabs-selected-modified ((t (:background "#ECF0F1" :foreground "red"))))
+ '(centaur-tabs-unselected ((t (:background "#DBDBDB" :foreground "royal blue"))))
+ '(centaur-tabs-unselected-modified ((t (:background "#DBDBDB" :foreground "red"))))
+ '(fringe ((t (:inherit default :background "#EBEEF5" :foreground "#EBEEF5"))))
+ '(hydra-face-red ((t (:foreground "red" :weight bold))))
+ '(linum ((t (:background "#ECF0F1" :foreground "#a7adba"))))
+ '(org-done ((t (:inherit org-headline-done :background "cyan" :foreground "medium blue" :weight bold))))
+ '(org-level-1 ((t (:inherit outline-1 :background "cornsilk2" :box nil :weight bold :height 1.3))))
+ '(org-level-2 ((t (:inherit outline-2 :background "cornsilk2" :box nil :height 1.2))))
+ '(org-level-3 ((t (:inherit outline-3 :background "MediumPurple1" :height 1.1))))
+ '(org-level-4 ((t (:inherit outline-4 :background "RoyalBlue1" :height 1.0))))
+ '(org-level-5 ((t (:inherit outline-5 :background "LightGoldenrod1"))))
+ '(org-table ((t (:background "SkyBlue1" :foreground "#425d78"))))
+ '(org-todo ((t (:background "yellow" :foreground "red" :weight bold))))
+ '(outline-1 ((t (:inherit nil :foreground "red"))))
+ '(outline-2 ((t (:inherit nil :foreground "dark orange"))))
+ '(outline-3 ((t (:inherit nil :foreground "yellow"))))
+ '(outline-4 ((t (:inherit nil :foreground "spring green"))))
+ '(outline-5 ((t (:inherit nil :foreground "cyan"))))
+ '(outline-6 ((t (:inherit nil :foreground "blue"))))
+ '(outline-7 ((t (:inherit nil :foreground "dark violet"))))
+ '(outline-8 ((t (:inherit nil :foreground "magenta"))))
+ '(which-key-command-description-face ((t (:foreground "dodger blue"))))
+ '(which-key-key-face ((t (:foreground "cyan3" :weight bold)))))
+
+;; MY CONFIGS
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+;; enable this if you want `swiper' to use it
+;; (setq search-default-mode #'char-fold-to-regexp)
+;; (global-set-key "\C-s" 'swiper)
+;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
+;; (global-set-key (kbd "<f6>") 'ivy-resume)
+;; (global-set-key (kbd "M-x") 'counsel-M-x)
+;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+;; (global-set-key (kbd "C-c g") 'counsel-git)
+;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
+;; (global-set-key (kbd "C-c k") 'counsel-ag)
+;; (global-set-key (kbd "C-x l") 'counsel-locate)
+;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+;; (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+(dashboard-setup-startup-hook)
+;; (neotree-show)
+
+;; the following functions add autocomplete functionality for parenthesis and quotes
+  (setq skeleton-pair t)
+  (defvar skeletons-alist
+    '((?\( . ?\))
+      (?\" . ?\")
+      (?[  . ?])
+      (?{  . ?})
+      (?$  . ?$)))
+
+  (global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+  (global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+  (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+  (global-set-key (kbd "\'") 'skeleton-pair-insert-maybe)
+
+
+(defadvice delete-backward-char (before delete-empty-pair activate)
+  (if (eq (cdr (assq (char-before) skeletons-alist)) (char-after))
+      (and (char-after) (delete-char 1))))
+
+(defadvice backward-kill-word (around delete-pair activate)
+  (if (eq (char-syntax (char-before)) ?\()
+      (progn
+ (backward-char 1)
+ (save-excursion
+   (forward-sexp 1)
+   (delete-char -1))
+ (forward-char 1)
+ (append-next-kill)
+ (kill-backward-chars 1))
+    ad-do-it))
+
+;; the following turns C-g into a onetime-buffer-killer
+(advice-add #'undefined :override #'keyboard-quit)
+
+;; turn off backups
+(setq make-backup-files nil)
+
+;; ask for password in the minibuffer
+(setq epa-pinentry-mode 'loopback)
+
+;; auto-re-encrypt gpg files
+(setq epa-file-cache-passphrase-for-symmetric-encryption t)
+
+;; set dashboard package preferences
+;;(setq dashboard-startup-banner 'logo)
+;;(setq dashboard-banner-logo-title "Virtue in doing, not in being.")
+;;(setq dashboard-startup-banner "~/.emacs.d/pics/triple_sailors.png")
+;; (setq dashboard-startup-banner "~/.emacs.d/pics/cc_13.png")
+(setq dashboard-center-content t)
+
+;; start emacs in server-mode
+(server-start)
+
+;; iflipb keybinds
+(global-set-key (kbd "<C-tab>") 'iflipb-next-buffer)
+(global-set-key
+ (if (featurep 'xemacs) (kbd "<C-iso-left-tab>") (kbd "<C-S-iso-lefttab>"))
+ 'iflipb-previous-buffer)
+(setq iflipb-wrap-around 1)
+
+;;; Other Window/Buffer
+;; http://emacs.stackexchange.com/q/22226/115
+(defhydra hydra-other-window-buffer
+  (global-map "C-x"
+              :color red)
+  "other window/buffer"
+  ;; ("<right>" other-window "→win")
+  ;; ("<left>" (lambda () (interactive) (other-window -1)) "win←")
+  ("<C-right>" next-buffer "→buf")
+  ("<C-left>" previous-buffer "buf←"))
+
+;; reopen last killed file using Ctrl+Shift+t shortcut
+(require 'cl)
+(require 'recentf)
+
+(defun find-last-killed-file ()
+  (interactive)
+  (let ((active-files (loop for buf in (buffer-list)
+                            when (buffer-file-name buf) collect it)))
+    (loop for file in recentf-list
+          unless (member file active-files) return (find-file file))))
+
+(define-key global-map (kbd "C-S-t") 'find-last-killed-file)
+
+

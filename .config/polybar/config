@@ -1,0 +1,297 @@
+;; Polybar config files
+
+[colors]
+foreground = #d6e5fb
+foreground2 = #d6e5fb
+foreground_inactive = #707070
+background = #12151a
+purple = #f0185a
+transparent = #12151a
+transparent_total = #00000000
+
+[bar/barprincipale]
+; general settings
+wm-restack = openbox
+monitor = ${env:MONITOR:}
+module-margin = 1
+radius = 0
+override-redirect = true ;true = polybar doesn't limit fullscreen
+border-top-size = 0
+fixed-center = true
+; border-left-size = 0
+; border-right-size = 0
+; border-bottom-size = 0
+border-size = 0
+border-color = #708090
+line-size = 2
+line-color = ${colors.purple}
+width = 100% ; control width of polybar
+offset-y = 0 ; can also use percentages
+offset-x = 0%
+; offset-x = 716 ; 1440/2 = 720-4 = 716, can also use percentages
+height = 20
+background = ${colors.transparent}
+bottom = true
+padding-left = 1
+padding-right = 1
+; modules layout
+;modules-left = date battery pulseaudio memory cpu temperature ;backlight 
+;modules-center = ewmh
+;modules-right = title ;spotify 
+modules-left = ewmh ;title
+modules-center = date pulseaudio battery memory cpu temperature ; wireless-network
+modules-right = 
+; font settings
+: font-0 = "FantasqueSansMono:style=Regular:size=10:weight=bold;2"
+;font-0 = "FantasqueSansMono:style=Regular:size=10:weight=bold;2"
+font-0 = Monospace:style=Regular:size=10;3
+font-1 = FontAwesome5Free:style=Regular:size=9
+font-2 = FontAwesome:style=Regular:size=9
+font-3 = FontAwesome:style=Brands:size=9
+; tray settings
+tray-position = right
+tray-detached = false
+tray-maxsize = 12
+tray-background = ${colors.transparent}
+
+[global/wm]
+margin-top = 4
+margin-bottom = 0
+
+[module/i3]
+type = internal/i3
+pin-workspaces = true
+show-all = true
+ws-num = 10
+strip-wsnumbers = true
+fuzzy-match = true
+label-unfocused = %name%
+label-unfocused-padding = 2
+label-unfocused-foreground = ${colors.foreground}
+label-unfocused-background = ${colors.background}
+label-focused = %name%
+label-focused-foreground = ${colors.purple}
+label-focused-background = ${colors.background}
+label-focused-underline = ${colors.purple}
+label-focused-padding = 2
+label-unused-foreground = ${colors.foreground}
+label-unused-background = ${colors.background}
+label-unused = %name%
+label-urgent = %name%
+label-urgent-padding = 2
+label-urgent-foreground = #d930bd
+             
+[module/date]
+type = internal/date
+interval = 1.0
+time = %l:%M
+date = %y.%m.%d
+; d:%j w:%U
+date-alt = %a %d %b
+time-alt = %H:%M:%S
+; label = %time%   %date%
+label =%date% %time% 
+label-foreground = ${colors.foreground2}
+
+compton="~/.config/compton.conf"
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP0
+poll-interval = 5
+; format-charging =  <label-charging>
+; format-discharging = <ramp-capacity> <label-discharging>
+format-charging = B: <label-charging>
+format-discharging = B: <label-discharging>
+label-discharging-foreground = ${colors.foreground2}
+; label-full = %percentage%
+label-full = [%percentage%]
+label-full-foreground = ${colors.foreground2}
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-foreground = ${colors.foreground2}
+format-charging-foreground = ${colors.foreground2}
+format-discharging-foreground = ${colors.foreground2}
+                                          
+[module/backlight]
+type = custom/script
+interval = 4
+format = <label>
+label-foreground = ${colors.foreground2}
+format-prefix-foreground = ${colors.foreground2}
+exec = $HOME/Documents/Projets/scripts/backlight.sh
+click-left = playerctl play-pause
+
+[module/pulseaudio]
+type = internal/pulseaudio
+;sink = alsa_output.pci-0000_12_00.3.analog-stereo
+sink = bluez_sink.CC_98_8B_56_ED_C0.a2dp_sink
+;
+label-muted = /
+;label-muted = 
+label-muted-foreground = ${colors.foreground2}
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+; format-volume =<ramp-volume> <label-volume>
+format-volume = (<label-volume>)
+; format-volume-prefix=VOL:
+format-volume-foreground = ${colors.foreground2}
+
+[module/memory]
+type = internal/memory
+interval = 5
+format = <label>
+; label =   %gb_used%
+label = M: %gb_used%
+label-foreground = ${colors.foreground2}
+
+[module/cpu]
+type = internal/cpu
+interval = 5
+label = C: %percentage%%
+label-foreground = ${colors.foreground2}
+label-padding-right = 1
+
+[module/temperature]
+type = internal/temperature
+units = true
+base-temperature = 55
+interval = 5
+hwmon-path = /sys/class/thermal/thermal_zone1/temp
+;hwmon-path = /sys/class/hwmon/hwmon0/device/hwmon/hwmon0/thermal_zone*
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+label = %temperature-c%
+format = <label>
+format-foreground = ${colors.foreground2}
+label-warn = %temperature-c%
+label-warn-foreground = ${colors.foreground2}
+
+[module/title]
+type = internal/xwindow
+format = <label>
+label = %title% 
+;
+label-maxlen = 40
+label-foreground = ${colors.foreground2} 
+
+[module/spotify]
+type = custom/script
+interval = 2
+format-prefix = " "
+format = <label>
+label-maxlen = 40
+label-foreground = ${colors.foreground2}
+format-prefix-foreground = ${colors.foreground2}
+exec = python3 ~/Documents/Projets/scripts/spotify_status.py -f '{artist} - {song}'
+click-left = playerctl play-pause
+
+[module/ewmh]
+type = internal/xworkspaces
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = true
+
+; Create click handler used to focus desktop
+; Default: true
+enable-click = true
+
+; Create scroll handlers used to cycle desktops
+; Default: true
+enable-scroll = true
+
+; icon-[0-9]+ = <desktop-name>;<icon>
+; NOTE: The desktop name needs to match the name configured by the WM
+; You can get a list of the defined desktops using:
+; $ xprop -root _NET_DESKTOP_NAMES
+;icon-0 = desktop 1;
+;icon-1 = desktop 2;
+;icon-2 = desktop 3;
+;icon-3 = desktop 4;
+;icon-4 = desktop 5;
+icon-0 = desktop 1;I
+icon-1 = desktop 2;II
+icon-2 = desktop 3;III
+icon-3 = desktop 4;IV
+icon-4 = desktop 5;V
+icon-5 = desktop 6;VI
+icon-6 = desktop 7;VII
+icon-7 = desktop 8;VIII
+icon-8 = desktop 9;IX
+icon-9 = desktop 10;X
+icon-default = 
+
+; Available tags:
+;   <label-monitor>
+;   <label-state> - gets replaced with <label-(active|urgent|occupied|empty)>
+; Default: <label-state>
+format = <label-state>
+
+; Available tokens:
+;   %name%
+; Default: %name%
+label-monitor = %name%
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-active = %icon%
+label-active-padding = 1
+label-active-foreground = #12151a
+label-active-background = #f0185a
+label-active-underline = #12151a
+label-active-overline = #12151a
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-occupied = %icon%
+label-occupied-padding = 1
+label-occupied-underline = #555555
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-urgent = %icon%
+label-urgent-padding = 1
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-underline = #9b0a20
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-empty = %icon% 
+label-empty-padding = 1
+; label-empty-foreground = #55
+label-empty-foreground = #d6e5fb
+
+[module/wireless-network]
+type = internal/network
+interface = wlp0s20f0u10
+interval = 3.0
+udspeed-minwidth = 0
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+label-connected =  %essid%
+label-connected-foreground = #eefafafa
+label-disconnected = 
+label-disconnected-foreground = #66ffffff

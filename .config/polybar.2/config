@@ -1,0 +1,201 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+;background = ${xrdb:color0:#222}
+;background = #0f1217
+background = #12151a
+background-alt = #444
+;foreground = ${xrdb:color7:#222}
+;foreground = #f7eef5
+foreground = #d6e5fb
+foreground-alt = #555
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+[bar/tiny]
+;monitor = ${env:MONITOR:HDMI-1}
+width = 400
+height = 30
+offset-x = 3
+;offset-x = 1610
+offset-y = 4
+radius = 2.5
+fixed-center = true
+
+;bottom = true
+bottom = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 0
+line-color = #f00
+
+border-size = 0
+border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = Roboto:style=Bold:size=10;2
+font-1 = FontAwesome5Free:style=Solid:size=10;1
+font-2 = FontAwesome5Free:style=Regular:size=10;1
+font-3 = FontAwesome5Brands:style=Regular:size=10;1
+font-4 = Droid Sans:style=Regular:size=10
+
+modules-left = 
+modules-center = pulseaudio date menu
+modules-right = 
+
+tray-position = right
+tray-padding = 2
+tray-background = ${colors.background}
+
+;override-redirect = true
+
+;scroll-up = bspwm-desknext
+;scroll-down = bspwm-deskprev
+
+;scroll-up = i3wm-wsnext
+;scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:20:...%
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-prefix-underline = ${colors.secondary}
+
+label-layout = %layout%
+label-layout-underline = ${colors.secondary}
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = ${colors.secondary}
+label-indicator-underline = ${colors.secondary}
+
+[module/mpd]
+type = internal/mpd
+format-online = <label-song>
+;format-online = <icon-prev> <icon-stop> <toggle> <icon-next>
+
+format-playing = ${self.format-online}
+format-paused = ${self.format-online}
+format-stopped = ${self.format-online}
+
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+
+label-song =   %artist% - %title%
+
+label-song-maxlen = 35
+label-song-ellipsis = true
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = "%{F#f2db55}%{F-}  %a, %b %d "
+;date = %y.%m.%d
+date-alt = 
+
+time = " %{F#6b90c5}%{F-}  %H:%M"
+;time = %l:%M
+time-alt = 
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #0a6cf5
+
+label = %date% %time%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume>
+label-volume = %{F#88bd8d}%{F-}  %percentage%%
+label-volume-foreground = #55aa55
+
+label-muted = muted
+label-muted-foreground = #666
+
+[module/menu]
+type = custom/script
+
+exec = echo %{F#ff8080}%{F-}
+click-left = $HOME/scripts/global-menu.sh
+format-padding = 0
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.secondary}
+label-close =  cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = power off
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 4
+margin-bottom = 4
+
+; vim:ft=dosini

@@ -1,0 +1,28 @@
+## OPENBOX AUTOSTART SCRIPT ##
+
+## CHOOSE BAR
+# sh ~/.config/polybar/launch_polybar.sh &
+# tint2 &
+xfce4-panel &
+
+## CHOOSE WALLPAPER
+# hsetroot -solid "#708090"
+# feh --bg-fill ~/Pictures/Wallpapers/tokyo-skyline.png &
+feh --bg-fill ~/Pictures/Wallpapers/hiroshi-nagai-1.jpg
+
+## CHOOSE NOTIFIER
+dunst -frame_width 2 -frame_color "#f0185a" -fn "monospace 10" -lb "#12151a" -nb "#12151a" -cb "#f0185a" -lf "#d6e5fb" -nf "#d6e5fb" -cf "#12151a" -lto 3 -nto 5 -cto 0 -align "center" -padding 16 -horizontal_padding 16 & # Colored Dunst
+	#bg="12151a"
+	#fg="d6e5fb"
+	#acc="f0185a"
+	#font="monospace"
+	#size="10"
+# dunst & # Vanilla Dunst
+
+## AUTOSTART APPLICATIONS
+compton & # No Shadows
+# xcompmgr -c -t-5 -l-5 -r4.2 -o.55 & # Shadows
+# pasystray &
+# xrdb &
+xrdb ~/.Xresources &
+# emacs --daemon # Launch Emacs at Startup
