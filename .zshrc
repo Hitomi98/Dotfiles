@@ -118,6 +118,16 @@ alias kpb='sudo ~/.config/polybar/kill_polybar.sh'
 alias gitclear='git config --global --unset credential.helper'
 alias power='cat ~/Personal/OneNote/00\ Personal/Thoughts/01\ My\ Rules.txt'
 
+# Git Aliases
+alias ga="git add ."
+alias gp="git push"
+alias gr="git fetch --all && git reset --hard origin/master #pull latest from git"
+# set gm = git commit followed by message, no quotes!
+setopt interactive_comments
+preexec(){ _lc=$1; }
+alias gm='git commit -m "${_lc#gm }" #'
+alias gf='git add . && git commit -m "${_lc#gm }" #'
+
 # My functions
 function pbl {
     curl -u o.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: https://api.pushbullet.com/v2/pushes -d type=note -d title="$*" 
