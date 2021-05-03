@@ -1,6 +1,6 @@
-(add-to-list 'load-path "~/.emacs.d/elegant-emacs")
-(require 'elegance)
-(require 'sanity)
+;;(add-to-list 'load-path "~/.emacs.d/elegant-emacs")
+;;(require 'elegance)
+;;(require 'sanity)
 
 ;; Older Stuff
 
@@ -104,7 +104,7 @@
 (setq epa-file-cache-passphrase-for-symmetric-encryption t)
 
 ;; start emacs in server-mode
-(server-start)
+;; (server-start)
 
 ;; iflipb keybinds
 (global-set-key (kbd "<C-tab>") 'iflipb-next-buffer)
@@ -136,3 +136,29 @@
           unless (member file active-files) return (find-file file))))
 
 (define-key global-map (kbd "C-S-t") 'find-last-killed-file)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+ '(custom-enabled-themes '(leuven))
+ '(package-selected-packages '(hydra ivy which-key use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(setq inhibit-splash-screen t)
+(switch-to-buffer "**")
+
+;; recentf stuff
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
