@@ -32,13 +32,13 @@
   ;; disable menu-bar
   (menu-bar-mode -1)
   ;; disable scroll-bar
-  (toggle-scroll-bar -1)
+  ;; (toggle-scroll-bar -1)
   ;; disable tool-nar
   (tool-bar-mode -1)
   ;; enable line numbers
   (global-linum-mode 1)
   ;; make the left fringe 4 pixels wide and the right disappear
-  (fringe-mode '(4 . 0))
+  ;; (fringe-mode '(4 . 0))
   ;; Only type in GPG password when opening
   (setq epa-file-cache-passphrase-for-symmetric-encryption t)
   ;; Set Tabs to 4
